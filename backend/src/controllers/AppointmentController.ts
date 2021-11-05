@@ -50,11 +50,9 @@ const AppointmentController: TAppointmentController = {
         let endTime: Date;
         try {
             startTime = new Date(newApmt.startTime);
-            console.log(`start: ${startTime.toISOString()}`);
             endTime = new Date(newApmt.endTime);
-            console.log(`end: ${endTime.toISOString()}`);
             if (endTime < startTime) {
-                throw;
+                throw new Error('Invalid date.');
             }
         } catch(e) {
             res.status(500).json({"error": "Invalid date."});
