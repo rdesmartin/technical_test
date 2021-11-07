@@ -3,6 +3,7 @@ import API from '../utils/API';
 import {Appointment, Customer, Staff} from "../types/types";
 import CreateForm from "../components/Form";
 import MyCalendar from "../components/Calendar";
+import {Alert} from "react-bootstrap";
 
 function Main() {
     const [staff, setStaff] = useState<Staff[]>([]);
@@ -32,7 +33,7 @@ function Main() {
 
         return ({
             allDay: false,
-            title: `staff: ${staffMember?.firstName} ${staffMember?.lastName}\ncustomer: ${customer?.name}`,
+            title: `${staffMember?.firstName} ${staffMember?.lastName}'s appointment with ${customer?.name}`,
             start: new Date(Date.parse(apmt.startTime)),
             end: new Date(Date.parse(apmt.endTime))
         });
@@ -40,16 +41,18 @@ function Main() {
 
     const onSubmitForm = async (formData:Appointment) => {
         try {
+            console.log(formData);
             const res = await API.post('/appointment', formData);
+            setAppointments([...appointments, res.data]);
         } catch (e:any) {
             setError("Error: could not create Appointment");
-            console.log(e);
         }
     };
 
     return (
         <div className="container p-4">
             <h1>Welcome to your calendar</h1>
+            { error.length > 0 && <Alert variant="danger">{error}</Alert> }
             <div className="mt-4">
                 <MyCalendar events={appointments.map(formatEvent)}/>
             </div>
