@@ -1,0 +1,23 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var express_1 = __importDefault(require("express"));
+var StaffController_1 = __importDefault(require("../controllers/StaffController"));
+var CustomerController_1 = __importDefault(require("../controllers/CustomerController"));
+var AppointmentController_1 = __importDefault(require("../controllers/AppointmentController"));
+var router = express_1.default.Router();
+router.get("/staff", StaffController_1.default.getStaff);
+router.get("/staff/:id", StaffController_1.default.getStaffById);
+router.post("/staff", StaffController_1.default.createStaff);
+router.delete("/staff/:id", StaffController_1.default.deleteStaff);
+router.get("/customer", CustomerController_1.default.getCustomer);
+router.get("/customer/:id", CustomerController_1.default.getCustomerById);
+router.post("/customer", CustomerController_1.default.createCustomer);
+router.delete("/customer/:id", CustomerController_1.default.deleteCustomer);
+router.get("/appointment", AppointmentController_1.default.getAppointment);
+router.get("/appointment/:id", AppointmentController_1.default.getAppointmentById);
+router.post("/appointment", AppointmentController_1.default.createAppointment);
+router.delete("/appointment/:id", AppointmentController_1.default.deleteAppointment);
+exports.default = router;

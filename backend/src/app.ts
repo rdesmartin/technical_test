@@ -1,9 +1,13 @@
 import express from "express";
 import router from "./routes/router";
 import logger from "morgan";
+import cors from "cors";
 
 const app = express();
-const port = 3000;
+const port = 8000;
+
+// enable CORS
+app.use(cors());
 
 app.use(logger('dev'));
 

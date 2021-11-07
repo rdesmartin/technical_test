@@ -19,9 +19,7 @@ const CustomerController: TCustomerController = {
                 res.status(400).json({"error": err.message});
                 return;
             }
-            res.json({
-                "data": rows
-            })
+            res.json(rows)
         });
     },
     getCustomerById: (req, res, next) => {
@@ -36,9 +34,7 @@ const CustomerController: TCustomerController = {
             if (!rows.length) {
                 res.status(400).json({"error": "Not found"})
             } else {
-                res.status(200).json({
-                    "data": rows
-                })
+                res.status(200).json(rows)
             }
         });
     },

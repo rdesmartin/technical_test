@@ -9,6 +9,14 @@ type TAppointmentController = {
     deleteAppointment: RequestHandler
 }
 
+// convert from snake-case (db) to camel case (json response)
+const rowToAppointment = (row:any):Appointment => ({
+    staffId: row.staff_id,
+    customerId: row.customer_id,
+    startTime: row.start_time,
+    endTime: row.end_time,
+    id: row.id
+});
 
 const AppointmentController: TAppointmentController = {
     getAppointment: (req, res, next) => {
@@ -19,9 +27,7 @@ const AppointmentController: TAppointmentController = {
                 res.status(400).json({"error": err.message});
                 return;
             }
-            res.json({
-                "data": rows
-            })
+            res.json(rows.map(rowToAppointment))
         });
     },
     getAppointmentById: (req, res, next) => {
@@ -36,9 +42,7 @@ const AppointmentController: TAppointmentController = {
             if (!rows.length) {
                 res.status(400).json({"error": "Not found"})
             } else {
-                res.status(200).json({
-                    "data": rows
-                })
+                res.status(200).json(rows.map(rowToAppointment))
             }
         });
     },
@@ -72,7 +76,7 @@ const AppointmentController: TAppointmentController = {
                 return;
             }
             console.log(rows);
-            res.status(200).json(rows);
+            res.status(200).json(rowToAppointment(rows[0]));
         })
     },
     deleteAppointment: (req,res, next) => {

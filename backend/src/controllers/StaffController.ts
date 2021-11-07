@@ -9,6 +9,12 @@ type TStaffController = {
     deleteStaff: RequestHandler
 }
 
+// convert from snake-case (db) to camel case (json response)
+const rowToStaff = (row:any):Staff => ({
+    firstName: row.first_name,
+    lastName: row.last_name,
+    id: row.id
+});
 
 const StaffController: TStaffController = {
     // return all staff
@@ -20,9 +26,7 @@ const StaffController: TStaffController = {
                 res.status(400).json({"error": err.message});
                 return;
             }
-            res.json({
-                "data": rows
-            })
+            res.json(rows.map(rowToStaff));
         });
     },
     // return one staff
@@ -38,18 +42,16 @@ const StaffController: TStaffController = {
             if (!rows.length) {
                 res.status(400).json({"error": "Not found"})
             } else {
-                res.status(200).json({
-                    "data": rows
-                })
+                res.status(200).json(rows.map(rowToStaff))
             }
         });
     },
     // create staff
     createStaff: (req, res, next) => {
         const newStaff:Staff = req.body;
-        const insert = 'INSERT INTO staff (firstname, lastname) VALUES (?,?)';
+        const insert = 'INSERT INTO staff (first_name, last_name) VALUES (?,?)';
         const getLast = 'SELECT * FROM staff ORDER BY id DESC LIMIT 1';
-        db.all(insert, [newStaff.firstname, newStaff.lastname], (err: any, rows: any) => {
+        db.all(insert, [newStaff.firstName, newStaff.lastName], (err: any, rows: any) => {
             if (err) {
                 res.status(400).json({"error": err.message});
                 return;
@@ -60,7 +62,7 @@ const StaffController: TStaffController = {
                 res.status(400).json({"error": err.message});
                 return;
             }
-            res.status(200).json(rows[0]);
+            res.status(200).json(rowToStaff(rows[0]));
         })
     },
     // delete staff
